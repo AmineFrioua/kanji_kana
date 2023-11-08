@@ -1,11 +1,11 @@
-defmodule KanjiKanaTest do
-  use ExUnit.Case, async: true
-  alias KanjiKana.Factory
+defmodule KanjiKana.KanjiKanaTest do
+  use KanjiKana.DataCase, async: true
+
   alias KanjiKana
 
   setup do
-    name =
-      %{name: insert(:name)}
+    name = insert(:name)
+    %{name: name}
   end
 
   describe "kanji_to_hiragana/1" do

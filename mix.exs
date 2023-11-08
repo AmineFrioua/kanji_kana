@@ -7,7 +7,8 @@ defmodule KanjiKana.MixProject do
       version: "0.1.0",
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -30,4 +31,8 @@ defmodule KanjiKana.MixProject do
       {:postgrex, ">= 0.0.0"}
     ]
   end
+
+    # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end

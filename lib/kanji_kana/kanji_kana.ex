@@ -37,10 +37,11 @@ defmodule KanjiKana do
   @spec kanji_to_hiragana(String.t()) :: String.t() | nil
   def kanji_to_hiragana(kanji_name) do
     kanji_name = String.trim(kanji_name)
+    name = Repo.get_by(Name, kanji: kanji_name)
 
-    Name
-    |> Repo.get_by(kanji: kanji_name)
-    |> Map.get(:hiragana, nil)
+    if name do
+      Map.get(name, :hiragana)
+    end
   end
 
   @doc """
@@ -62,10 +63,11 @@ defmodule KanjiKana do
   @spec kanji_to_katakana(String.t()) :: String.t() | nil
   def kanji_to_katakana(kanji_name) do
     kanji_name = String.trim(kanji_name)
+    name = Repo.get_by(Name, kanji: kanji_name)
 
-    Name
-    |> Repo.get_by(kanji: kanji_name)
-    |> Map.get(:katakana, nil)
+    if name do
+      Map.get(name, :katakana)
+    end
   end
 
   @doc """
@@ -87,9 +89,10 @@ defmodule KanjiKana do
   @spec kanji_to_romaji(String.t()) :: String.t() | nil
   def kanji_to_romaji(kanji_name) do
     kanji_name = String.trim(kanji_name)
+    name = Repo.get_by(Name, kanji: kanji_name)
 
-    Name
-    |> Repo.get_by(kanji: kanji_name)
-    |> Map.get(:romaji, nil)
+    if name do
+      Map.get(name, :romaji)
+    end
   end
 end

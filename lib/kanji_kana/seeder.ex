@@ -9,25 +9,26 @@ defmodule KanjiKana.Seeder do
     @csv_file_path
     |> File.stream!()
     |> NimbleCSV.RFC4180.parse_stream()
-    |> Enum.each(&import_row/1)
+    |> Enum.map(&import_row/1)
+    |> insert_rows
   end
 
   defp import_row([kanji, katakana, hiragana, romaji]) do
-    %Name{
+    now = DateTime.truncate(DateTime.utc_now(), :second)
+
+    %{
       kanji: kanji,
       hiragana: hiragana,
       katakana: katakana,
-      romaji: romaji
+      romaji: romaji,
+      inserted_at: now,
+      updated_at: now
     }
-    |> Repo.insert(ignore_conflicts: true)
-    |> log_result(kanji)
   end
 
-  defp log_result({:ok, _name}, kanji) do
-    Logger.info("Inserted name for Kanji: #{kanji}")
-  end
+  defp insert_rows(rows) do
+    {number_of_records, nil} = Repo.insert_all(Name, rows)
 
-  defp log_result({:error, changeset}, kanji) do
-    Logger.error("Failed to insert name for Kanji: #{kanji}. Reason: #{inspect(changeset)}")
+    Logger.info("Inserted #{number_of_records} records")
   end
 end

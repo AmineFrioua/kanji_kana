@@ -8,7 +8,7 @@ defmodule KanjiKana.Name do
     field(:katakana, :string)
     field(:romaji, :string)
 
-    timestamps()
+    timestamps(type: :utc_datetime)
   end
 
   @doc false

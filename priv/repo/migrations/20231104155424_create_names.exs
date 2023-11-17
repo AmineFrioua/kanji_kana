@@ -7,8 +7,8 @@ defmodule KanjiKana.Repo.Migrations.CreateNames do
       add :hiragana, :string
       add :katakana, :string
       add :romaji, :string
-
-      timestamps()
+      timestamps(type: :utc_datetime)
     end
-end
+    create index(:names, [:kanji])
+  end
 end

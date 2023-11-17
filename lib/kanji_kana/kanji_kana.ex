@@ -15,7 +15,6 @@ defmodule KanjiKana do
       "Yamada Tarou"
   """
 
-  alias KanjiKana.Repo
   alias KanjiKana.Name
 
   @doc """
@@ -34,13 +33,13 @@ defmodule KanjiKana do
       iex> KanjiKana.kanji_to_hiragana("山田太郎")
       "やまだたろう"
   """
-  @spec kanji_to_hiragana(String.t()) :: String.t() | nil
-  def kanji_to_hiragana(kanji_name) do
+  @spec kanji_to_hiragana(String.t(), module()) :: String.t() | nil
+  def kanji_to_hiragana(kanji_name, repo) do
     kanji_name = String.trim(kanji_name)
-    name = Repo.get_by(Name, kanji: kanji_name)
+    name = repo.get_by(Name, kanji: kanji_name)
 
     if name do
-      Map.get(name, :hiragana)
+      name.hiragana
     end
   end
 
@@ -60,13 +59,13 @@ defmodule KanjiKana do
       iex> KanjiKana.kanji_to_katakana("山田太郎")
       "ヤマダタロウ"
   """
-  @spec kanji_to_katakana(String.t()) :: String.t() | nil
-  def kanji_to_katakana(kanji_name) do
+  @spec kanji_to_katakana(String.t(), module()) :: String.t() | nil
+  def kanji_to_katakana(kanji_name, repo) do
     kanji_name = String.trim(kanji_name)
-    name = Repo.get_by(Name, kanji: kanji_name)
+    name = repo.get_by(Name, kanji: kanji_name)
 
     if name do
-      Map.get(name, :katakana)
+      name.katakana
     end
   end
 
@@ -86,13 +85,13 @@ defmodule KanjiKana do
       iex> KanjiKana.kanji_to_romaji("山田太郎")
       "Yamada Tarou"
   """
-  @spec kanji_to_romaji(String.t()) :: String.t() | nil
-  def kanji_to_romaji(kanji_name) do
+  @spec kanji_to_romaji(String.t(), module()) :: String.t() | nil
+  def kanji_to_romaji(kanji_name, repo) do
     kanji_name = String.trim(kanji_name)
-    name = Repo.get_by(Name, kanji: kanji_name)
+    name = repo.get_by(Name, kanji: kanji_name)
 
     if name do
-      Map.get(name, :romaji)
+      name.romaji
     end
   end
 end

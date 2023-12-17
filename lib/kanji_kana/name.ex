@@ -1,4 +1,7 @@
 defmodule KanjiKana.Name do
+  @moduledoc """
+  Provides a schema for the names table.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

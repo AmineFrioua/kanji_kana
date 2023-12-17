@@ -1,4 +1,7 @@
 defmodule KanjiKana.Factory do
+  @moduledoc """
+  Provides a factory for creating name entries.
+  """
   use ExMachina.Ecto, repo: KanjiKana.Repo
 
   def name_factory(attrs \\ %{}) do

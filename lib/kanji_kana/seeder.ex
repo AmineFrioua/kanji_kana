@@ -1,4 +1,7 @@
 defmodule KanjiKana.Seeder do
+  @moduledoc """
+  Seeds the database with names from a CSV file.
+  """
   alias KanjiKana.Repo
   alias KanjiKana.Name
   require Logger

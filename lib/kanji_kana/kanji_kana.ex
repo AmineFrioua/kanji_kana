@@ -16,6 +16,7 @@ defmodule KanjiKana do
   """
 
   alias KanjiKana.Name
+  alias KanjiKana.Translator
 
   @doc """
   Converts a Kanji name to its Hiragana representation.
@@ -93,5 +94,42 @@ defmodule KanjiKana do
     if name do
       name.romaji
     end
+  end
+
+  @doc """
+  Converts a latin name to hirana.
+  ### Parameters
+  - latin_name : String.t() - The latin name to be converted.
+  ### Returns
+  - hiragana : String.t() - The hiragana representation of the given latin name.
+  ### Examples
+      iex> KanjiKana.latin_to_hiragana("Yamada Tarou")
+      "やまだたろう"
+  """
+  @spec latin_to_hiragana(String.t()) :: String.t() | nil
+  def latin_to_hiragana(latin_name) do
+    latin_name
+    |> Translator.normalize()
+    |> Enum.map(&Translator.to_hiragana/1)
+    |> Enum.join()
+  end
+
+  @doc """
+  Converts a latin name to katakana.
+  ### Parameters
+  - latin_name : String.t() - The latin name to be converted.
+  ### Returns
+  - katakana : String.t() - The katakana representation of the given latin name.
+  ### Examples
+      iex> KanjiKana.latin_to_katakana("Yamada Tarou")
+      "ヤマダタロウ"
+  """
+
+  @spec latin_to_katakana(String.t()) :: String.t() | nil
+  def latin_to_katakana(latin_name) do
+    latin_name
+    |> Translator.normalize()
+    |> Enum.map(&Translator.to_katakana/1)
+    |> Enum.join()
   end
 end

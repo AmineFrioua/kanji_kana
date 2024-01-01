@@ -38,4 +38,22 @@ defmodule KanjiKana.KanjiKanaTest do
       assert KanjiKana.kanji_to_romaji("不存在", Repo) == nil
     end
   end
+
+  describe "latin_to_katakana/1" do
+    test "converts a given latin name to katakana" do
+      assert KanjiKana.latin_to_katakana("Yamada Tarou") == "ヤマダタロウ"
+      assert KanjiKana.latin_to_katakana("Andrew") == "アンドレヲ"
+      assert KanjiKana.latin_to_katakana("Mohamed Amine") == "モハメドアミネ"
+      assert KanjiKana.latin_to_katakana("Xinyu Chen") == "シニュヘン"
+    end
+  end
+
+  describe "latin_to_hiragana/1" do
+    test "converts a given latin name to hiragana" do
+      assert KanjiKana.latin_to_hiragana("Yamada Tarou") == "やまだたろう"
+      assert KanjiKana.latin_to_hiragana("Andrew") == "あんどれを"
+      assert KanjiKana.latin_to_hiragana("Mohamed Amine") == "もはめどあみね"
+      assert KanjiKana.latin_to_hiragana("Xinyu Chen") == "しにゅへん"
+    end
+  end
 end

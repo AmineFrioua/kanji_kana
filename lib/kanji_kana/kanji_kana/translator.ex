@@ -3,21 +3,22 @@ defmodule KanjiKana.Translator do
   Provides a function that convert Latin names to katakana or Hiragana
   """
   alias KanjiKana.Letters
+  @spec normalize(String.t()) :: [String.t()]
   def normalize(text) when is_atom(text), do: normalize(Atom.to_string(text))
 
   def normalize(text) when is_binary(text) do
     text
     |> String.trim()
     |> String.downcase()
+    |> String.split()
   end
 
-  def normalize(_), do: nil
+  def normalize(_), do: []
 
   def divide(word) do
-    word = normalize(word)
-
-    Regex.scan(~r/(?:[aeiouy]|[^aeiouy]+[aeiouy]|[^aeiouy]+$)/, word)
+    Regex.scan(~r/(?:[aeiou]|[^aeiou]+[aeiou]|[^aeiou]+$)/, word)
     |> Enum.map(&List.first/1)
+    |> List.flatten()
     |> Enum.map(&split_on_consonants/1)
     |> List.flatten()
   end
@@ -43,7 +44,11 @@ defmodule KanjiKana.Translator do
 
     case String.length(syllable) do
       1 ->
-        add_o(syllable)
+        if syllable == "n" do
+          syllable
+        else
+          add_o(syllable)
+        end
 
       3 ->
         if String.at(syllable, 0) != "n" do
@@ -54,12 +59,6 @@ defmodule KanjiKana.Translator do
 
       _ ->
         syllable
-    end
-
-    if String.length(syllable) == 1 do
-      add_o(syllable)
-    else
-      syllable
     end
   end
 
@@ -82,11 +81,56 @@ defmodule KanjiKana.Translator do
     end
   end
 
-  defp split_on_consonants(text) do
-    Regex.scan(~r/([bcdfghjklmnpqrstvwxyz][^aeiouy]*)/i, text)
-    |> Enum.map(&List.first/1)
-    |> Enum.intersperse("o")
-    |> Enum.join()
+  @constants [
+    "b",
+    "c",
+    "d",
+    "f",
+    "g",
+    "h",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "v",
+    "w",
+    "x",
+    "z"
+  ]
+
+  def split_on_consonants(input_string) do
+    input_string
+    |> String.graphemes()
+    |> Enum.reduce([], fn char, acc ->
+      if acc == [] do
+        [char]
+      else
+        handle_stacked_constants(char, acc)
+      end
+    end)
+  end
+
+  defp handle_stacked_constants(char, acc) do
+    [prev_char | _] = acc
+
+    if prev_char in @constants and char in @constants and
+         char != prev_char do
+      acc ++ [char]
+    else
+      if l = List.last(acc) do
+        new_l = l <> char
+        acc = acc -- [l]
+        acc ++ [new_l]
+      else
+        acc ++ [char]
+      end
+    end
   end
 
   def hiragana(syllable) do
